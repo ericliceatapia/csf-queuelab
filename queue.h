@@ -1,5 +1,5 @@
 //=============================================
-// PUT YOUR NAME HERE
+// ERIC LICEA TAPIA
 //=============================================
 /*
  * This program implements a queue supporting both FIFO and LIFO
@@ -28,10 +28,12 @@ typedef struct node_t {
 /* Queue structure */
 typedef struct {
     Node_t *head;  /* Linked list of elements */
-  /*
+    /*
       You will need to add more fields to this structure
       to efficiently implement q_size and q_insert_tail
     */
+    Node_t *tail;
+    int count;
 } Queue_t;
 
 

@@ -1,5 +1,5 @@
 //=============================================
-// PUT YOUR NAME HERE
+// ERIC LICEA TAPIA
 //=============================================
 
 // This program implements a queue supporting both FIFO and LIFO operations.
@@ -24,8 +24,14 @@
 Queue_t *q_new()
 {
     Queue_t *q =  malloc(sizeof(Queue_t));
-    /* What if malloc returned NULL? */
+
+    if(q == NULL) {
+	return NULL;
+    }
+
     q->head = NULL;
+    q->tail = NULL;
+    q->count = 0;
     return q;
 }
 
@@ -37,7 +43,18 @@ Queue_t *q_new()
 //=============================================
 void q_free(Queue_t *q)
 {
-    /* How about freeing the list elements? */
+    if(q == NULL) {
+	return;
+    }
+
+    Node_t *current = q->head;
+
+    while(current != NULL) {
+	Node_t *next_node = current->next;
+	free(current);
+	current = next_node;
+    }
+
     /* Free queue structure */
     free(q);
 }
@@ -52,13 +69,25 @@ void q_free(Queue_t *q)
 //=============================================
 bool q_insert_head(Queue_t *q, int v)
 {
-    Node_t *newh;
-    /* What should you do if the q is NULL? */
-    newh = malloc(sizeof(Node_t));
-    /* What if malloc returned NULL? */
+    if(q == NULL) {
+	return false;
+    }
+
+    Node_t *newh = malloc(sizeof(Node_t));
+
+    if(newh == NULL) {
+	return false;
+    }
+
     newh->value = v;
     newh->next = q->head;
     q->head = newh;
+
+    if(q->tail == NULL) {
+	q->tail = newh;
+    }
+
+    q->count++;
     return true;
 }
 
@@ -74,7 +103,31 @@ bool q_insert_tail(Queue_t *q, int v)
 {
     /* You need to write the complete code for this function */
     /* Remember: It should operate in O(1) time */
-    return false;
+
+    if(q == NULL) {
+	return false;
+    }
+
+    Node_t *newt = malloc(sizeof(Node_t));
+
+    if(newt == NULL) {
+	return false;
+    }
+
+    newt->value = v;
+    newt->next = NULL;
+
+    if(q->tail == NULL) {
+	q->head = newt;
+    }
+    else {
+	q->tail->next = newt;
+    }
+
+    q->tail = newt;
+
+    q->count++;
+    return true;
 }
 
 
@@ -89,8 +142,18 @@ bool q_insert_tail(Queue_t *q, int v)
 //=============================================
 bool q_remove_head(Queue_t *q, int *vp)
 {
-    /* You need to fix up this code. */
-    q->head = q->head->next;
+    if(q == NULL || q->head == NULL || vp == NULL) {
+	return false;
+    }
+
+    *vp = q->head->value;
+
+    Node_t *remove_head = q->head;
+    q->head = remove_head->next;
+
+    free(remove_head);
+
+    q->count--;
     return true;
 }
 
@@ -103,9 +166,10 @@ bool q_remove_head(Queue_t *q, int *vp)
 //=============================================
 int q_size(Queue_t *q)
 {
-    /* You need to write the code for this function */
-    /* Remember: It should operate in O(1) time */
-    return 0;
+    if(q == NULL || q->head == NULL) {
+	return 0;
+    }
+    return q->count;
 }
 
 
@@ -121,6 +185,21 @@ int q_size(Queue_t *q)
 //=============================================
 void q_reverse(Queue_t *q)
 {
-    /* You need to write the code for this function */
-}
+    if(q == NULL || q->head == NULL || q->count == 1) {
+	return;
+    }
 
+    Node_t *prev = NULL;
+    Node_t *current = q->head;
+    Node_t *next = NULL;
+
+    while(current != NULL) {
+	next = current->next;
+	current->next = prev;
+	prev = current;
+	current = next;
+    }
+
+    q->tail = q->head;
+    q->head = prev;
+}
