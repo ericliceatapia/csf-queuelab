@@ -1,5 +1,5 @@
 # Queue Lab
-Course project for Computer Systems Fundamentals
+Course project for Computer Systems Fundamentals.
 
 ## Overview
 This repository contains my implementation of the Queue Lab, an assignment focused on assessing C programming skills through explicit memory management, pointer-based data structures, and robust code implementation. The goal is to modify `queue.h` and `queue.c` while adhering to best practices and passing all test cases using the provided autograder.  
